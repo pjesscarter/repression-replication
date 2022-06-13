@@ -1,0 +1,15 @@
+		(1)	(2)	(3)	(4)	(5)
+VARIABLES	LABELS	reg	reg	No	No	No
+						
+DMilitaryPresence	Indicator military presence	9.255*		2.242*	6.214*	
+		(4.377)		(1.014)	(2.969)	
+LnDistMilitaryBase	ln distance closest military base		-2.980*			-0.792*
+			(1.332)			(0.306)
+						
+Observations		276	276	276	276	276
+R-squared		0.667	0.667	0.824	0.496	0.825
+Province fixed effects		x	x	x	x	x
+Controls		x	x	x	x	x
+DV mean		71.16	71.16	54.82	38.74	54.82
+Robust standard errors in parentheses						
+** p<0.01, * p<0.05						

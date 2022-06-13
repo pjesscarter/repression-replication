@@ -1,0 +1,15 @@
+		(1)	(2)	(3)	(4)	(5)
+VARIABLES	LABELS	FS-Victims	RF-Registration	RF-NO	IV-Registration	IV-NO
+						
+DMilitaryPresence	Indicator military presence	2.068**	8.908	2.488*		
+		(0.413)	(4.574)	(0.978)		
+shVictims_70	Victims / 10,000 inh.				4.307*	1.203*
+					(2.120)	(0.495)
+						
+Observations		276	276	276	276	276
+R-squared		0.564	0.665	0.830		
+Province fixed effects		x	x	x	x	x
+Controls		x	x	x	x	x
+Kleibergen Paap F-stat.					25.14	25.14
+Robust standard errors in parentheses						
+** p<0.01, * p<0.05						

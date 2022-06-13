@@ -1,0 +1,13 @@
+		(1)	(2)	(3)	(4)
+VARIABLES	LABELS	OLS-Registration	OLS-NO	IV-Registration	IV-NO
+					
+shVictims_70	Victims / 10,000 inh.	1.610	0.410*	4.437*	1.075*
+		(0.869)	(0.185)	(2.078)	(0.491)
+					
+Observations		276	276	276	276
+R-squared		0.663	0.823		
+Province fixed effects		x	x	x	x
+Controls		x	x	x	x
+Kleibergen Paap F-stat.				26.27	26.27
+Robust standard errors in parentheses					
+** p<0.01, * p<0.05					

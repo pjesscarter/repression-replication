@@ -1,0 +1,15 @@
+		(1)	(2)	(3)	(4)	(5)
+VARIABLES	LABELS	Victims	Registration	NO	IV-Registration	IV-NO
+						
+DMilitaryPresence_pre1960	Indicator military presence: Pre 1960	1.973**	7.429	2.069*		
+		(0.434)	(4.560)	(1.005)		
+shVictims_70	Victims / 10,000 inh.				3.765	1.049*
+					(2.201)	(0.523)
+						
+Observations		276	276	276		
+R-squared		0.550	0.662	0.823		
+Province fixed effects		x	x	x	x	x
+Controls		x	x	x	x	x
+Kleibergen Paap F-stat.					20.71	20.71
+Robust standard errors in parentheses						
+** p<0.01, * p<0.05						

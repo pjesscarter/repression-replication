@@ -1,0 +1,14 @@
+		(1)	(2)	(3)	(4)	(5)	(6)	(7)	(8)
+VARIABLES	LABELS	Main	Port	Airport	Entry point	Power plant	Provincial capital	Regional capital	Church
+									
+DMilitaryPresence	Indicator military presence	2.086**	2.103**	2.016**	2.095**	2.131**	2.360**	2.107**	2.090**
+		(0.407)	(0.410)	(0.437)	(0.409)	(0.414)	(0.437)	(0.423)	(0.408)
+facility	Indicator other institution		0.152	0.306	-0.120	0.691	-0.793	-0.325	0.790
+			(0.305)	(0.450)	(0.417)	(0.382)	(0.502)	(0.762)	(1.112)
+									
+Observations		276	276	276	276	276	276	276	276
+R-squared		0.565	0.566	0.566	0.565	0.570	0.572	0.565	0.566
+Province fixed effects		x	x	x	x	x	x	x	x
+Controls		x	x	x	x	x	x	x	x
+Robust standard errors in parentheses									
+** p<0.01, * p<0.05									
