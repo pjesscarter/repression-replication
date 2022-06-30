@@ -10,7 +10,7 @@ data <- lapply(toload, read_dta)
 shp <- read_sf("Map/cl_comunas_geo/Paper Replication/Data/Map/cl_comunas_geo.shp")
 fnl <- data[[1]] 
 
-fnl <- fnl %>% filter(!is.na(IDProv)) %>% mutate(dist = exp(LnDistMilitaryBase),
+fnl <- fnl %>% mutate(dist = exp(LnDistMilitaryBase),
                cutoff3 = as.numeric(dist<3),
                cutoff4 = as.numeric(dist<4),
                cutoff5 = as.numeric(dist<5),
@@ -32,14 +32,34 @@ makeform <- function(treat,outcome){
           paste(c(treat,controls), collapse = " + "), 
           sep = " ~ "))
 }
+#Sample options are 'main', 'nona', 'all'
+#weights argument controls whether weighted regression is used
+fitlm <- function(treat,outcome,sample="main",weights=T){
+  
+  if(sample=="nona"){
+    mdat <- fnl %>% filter(!is.na(IDProv))
+  } else if(sample=="all"){
+    mdat <- fnl
+  } else{
+    mdat <- fnl %>% filter(MainSample==1)
+  }
+  
+  if(weights){
+    return(lm(makeform(treat,outcome),data=mdat,weights=Pop70))
+  } else{
+    return(lm(makeform(treat,outcome),data=mdat))
+  }
+}
 
 #Victimization results, robustness to binary linear regression
 #main result holds for cutoffs <5 miles
 models<-list()
 cutoffs <- c(3:5,10,20)
 for(i in seq_along(cutoffs)){
-  models[[i]]<-lm(makeform(paste("cutoff",cutoffs[i],sep=""),"shVictims_70"),data=fnl,weights=Pop70)
-  
+  models[[i]]<-fitlm(treat = paste("cutoff",cutoffs[i],sep=""),
+                     outcome = "shVictims_70",
+                     sample = "main",
+                     weights= T)
 }
 stargazer(models,
           style="apsr",paste0(cutoffs, " Miles"),
