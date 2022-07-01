@@ -98,8 +98,21 @@ stargazer(models,
           dep.var.labels = c("NO Vote Share"),
           keep.stat = c("n"))
 #Recreate coefficient plots for Concertacion support
-
-
+outcomes <- c(share_aylwin89,
+              share_frei93,
+              share_lagos99,
+              share_bachelet05,
+              share_frei09)
+# `qui' reghdfe share_aylwin89 		DMilitaryPresence $C [aw=${W}],absorb(IDProv) vce(robust)
+# 	parmest,saving("${TEMP}temp", replace)
+# 	`qui' reghdfe share_frei93 		DMilitaryPresence 	$C [aw=${W}],absorb(IDProv) vce(robust)
+# parmest,saving("${TEMP}temp1", replace)
+# `qui' reghdfe share_lagos99 		DMilitaryPresence $C [aw=${W}],absorb(IDProv) vce(robust)
+# 	parmest,saving("${TEMP}temp2", replace)
+# 	`qui' reghdfe share_bachelet05 	DMilitaryPresence $C [aw=${W}],absorb(IDProv) vce(robust)
+# parmest,saving("${TEMP}temp3", replace)
+# `qui' reghdfe share_frei09 		DMilitaryPresence 	$C [aw=${W}],absorb(IDProv) vce(robust)
+# 	parmest,saving("${TEMP}temp4", replace)
 #Repeat with a latent fuzzy RD design - treatment variable is victims above the 75th
 #percentile
 #Compute bandwidth using rdbwselect, use default values for other variables for now
@@ -108,7 +121,7 @@ cutoffs <- seq(2,20,0.1)
 #Store point estimate along with robust SE and p-value, plus cutoff
 store <- matrix(nrow = length(cutoffs),ncol=4)
 for(i in seq_along(cutoffs)){
-  m <-tryCatch({rdrobust(y=fnl$shVictims_70,x=fnl$dist,fuzzy = fnl$DVictims_p75,
+  m <-tryCatch({rdrobust(y=fnl$Share_reg70_w2,x=fnl$dist,fuzzy = fnl$DVictims_p75,
                  deriv =0,
                  c=cutoffs[i],
                  p=1,
