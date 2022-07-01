@@ -1,0 +1,103 @@
+---
+title: "Understanding data"
+date: "June 2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r include = FALSE}
+### Library
+library(sf)
+library(ggplot2)
+library(tmap)
+library(RColorBrewer)
+library(dplyr)
+library(tidyr)
+library(stargazer)
+library(stringr)
+library(vtable)
+library(haven)
+library(ggplot2)
+library(expss)
+library(gridExtra)
+library(ggrepel)
+
+```
+
+# Map of military bases and repression
+
+```{r , echo=FALSE, fig.cap="Rep Figure 1 in paper", out.width = '100%'}
+knitr::include_graphics("/Users/maranzazuru/Dropbox/Research/Replication Project/Replication Code/QGIS Code/Fig1. North Chile.png")
+knitr::include_graphics("/Users/maranzazuru/Dropbox/Research/Replication Project/Replication Code/QGIS Code/Fig1. Center Chile.png")
+knitr::include_graphics("/Users/maranzazuru/Dropbox/Research/Replication Project/Replication Code/QGIS Code/Fig 1. South Chile.png")
+```
+
+```{r include=FALSE}
+
+  #Load data
+  setwd("/Users/maranzazuru/Dropbox/Research/Replication Project/Extracted Files/Data")
+  d.rep <- read_dta("FinalDatasetForReplication.dta")
+  d.mil <- read_dta("MilitaryBasesByYear.dta")
+  d.vic <- read_dta("VictimsByYear.dta")
+  d.lb <- read_dta("LB_Analysis.dta")
+  
+  #Arrange by province and comuna
+  d.rep <- d.rep %>% arrange(IDProv, comuna)
+  d.rep <- d.rep %>% select(IDProv, comuna, MainSample, DMilitaryPresence, everything())
+  
+  #Create data to see province-county relation
+  n_county <- d.rep %>% group_by(IDProv) %>% count()
+
+  inf_county <- d.rep %>% group_by(IDProv) %>% summarize(n_counties = n(),
+                                                         n_military = sum(DMilitaryPresence, na.rm=TRUE),
+                                                         n_expsample = sum(MainSample, na.rm=TRUE))
+
+
+  inf_c_victims <- d.rep %>% group_by(IDProv, DMilitaryPresence, MainSample) %>% 
+                             summarize(n_counties = n(),
+                                      avg_vict_shVic70 = mean(shVictims_70, na.rm=TRUE),
+                                      avg_reg70 = mean(Share_reg70_w2, na.rm=TRUE),
+                                      avg_shNo = mean(VoteShareNo, na.rm=TRUE),
+                                      avg_shNo70 = mean(VoteShareNo_pop70, na.rm=TRUE))
+```
+# Number of provinces
+
+```{r echo=FALSE}
+  uniqueN(d.rep$IDProv)
+```
+
+We have 25 provinces (26 with "NA" province). However, in the shapefile division_provincial we have 56.
+I guess these are only the one with military presence. Well, no because two provinces does not have military presence.
+
+# Mean and median number of counties in provinces
+```{r echo=FALSE}
+    mean(n_county$n) 
+    median(n_county$n) 
+```
+
+# Key info on the relation between province and county
+```{r echo=FALSE}
+  knitr::kable(inf_county, col.names = c("IDProv", "N county", "N military", "N sample"), caption = "Key info province and county") %>%
+  kable_styling()
+```
+
+All but two province has a county with military presence.
+However, some counties in provinces with military presence are not in the main estimation sample.
+  
+# Zoom in into relation between province and county 
+
+```{r echo=FALSE}
+  knitr::kable(inf_c_victims, col.names = c("IDProv", "Military", "Sample", "N county ", "Avg. Victims", "Avg. Reg", "Avg. NO 1988 pop", "Avg. NO 1970 pop"), caption = "Detail info key var province and county") %>%
+  kable_styling()
+```
+
+There are counties inside provinces with military presence which are not included.
+This seems to be  counties without military presence and high vitimin share in 70.
+As I understand the variable "shVictims_70" is the one used as an instrument in the IV.
+Need to understand this better.
+
+
+
