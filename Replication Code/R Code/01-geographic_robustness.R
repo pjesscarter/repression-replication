@@ -3,14 +3,17 @@ if(!require(pacman)){
   install.packages("pacman")
   library(pacman)
 }
-p_load(haven,stringr,dplyr,ggplot2,sf,stargazer)
+p_load(haven,stringr,dplyr,ggplot2,sf,stargazer,rdrobust)
 setwd("../../Extracted Files/Data")
 toload <- str_subset(list.files(),".dta")
 data <- lapply(toload, read_dta)
 shp <- read_sf("Map/cl_comunas_geo/Paper Replication/Data/Map/cl_comunas_geo.shp")
 fnl <- data[[1]] 
+#Note that 2 is the smallest integer cutoff such that any non-treated
+#observations are included, but there are only 2 obs 1<d<2 and only 5: 2<d<3, so start with 3
 
 fnl <- fnl %>% mutate(dist = exp(LnDistMilitaryBase),
+               cutoff2 = as.numeric(dist<2),
                cutoff3 = as.numeric(dist<3),
                cutoff4 = as.numeric(dist<4),
                cutoff5 = as.numeric(dist<5),
@@ -67,5 +70,62 @@ stargazer(models,
           covariate.labels = c("Treatment Indicator"),
           dep.var.labels = c("Victimization"),
           keep.stat = c("n"))
-#Repeat with a censored fuzzy RD design
 
+#Voter registration
+for(i in seq_along(cutoffs)){
+  models[[i]]<-fitlm(treat = paste("cutoff",cutoffs[i],sep=""),
+                     outcome = "Share_reg70_w2",
+                     sample = "main",
+                     weights= T)
+}
+stargazer(models,
+          style="apsr",paste0(cutoffs, " Miles"),
+          keep=paste0("cutoff",cutoffs),
+          covariate.labels = c("Treatment Indicator"),
+          dep.var.labels = c("Voter Registration"),
+          keep.stat = c("n"))
+#Voter registration
+for(i in seq_along(cutoffs)){
+  models[[i]]<-fitlm(treat = paste("cutoff",cutoffs[i],sep=""),
+                     outcome = "VoteShareNo",
+                     sample = "main",
+                     weights= T)
+}
+stargazer(models,
+          style="apsr",paste0(cutoffs, " Miles"),
+          keep=paste0("cutoff",cutoffs),
+          covariate.labels = c("Treatment Indicator"),
+          dep.var.labels = c("NO Vote Share"),
+          keep.stat = c("n"))
+#Recreate coefficient plots for Concertacion support
+
+
+#Repeat with a latent fuzzy RD design - treatment variable is victims above the 75th
+#percentile
+#Compute bandwidth using rdbwselect, use default values for other variables for now
+
+cutoffs <- seq(2,20,0.1)
+#Store point estimate along with robust SE and p-value, plus cutoff
+store <- matrix(nrow = length(cutoffs),ncol=4)
+for(i in seq_along(cutoffs)){
+  m <-tryCatch({rdrobust(y=fnl$shVictims_70,x=fnl$dist,fuzzy = fnl$DVictims_p75,
+                 deriv =0,
+                 c=cutoffs[i],
+                 p=1,
+                 q=2,
+                 kernel = "epanechnikov",
+                 masspoints="adjust",
+                 subset = !is.na(fnl$IDProv),
+                 covs = cbind(fnl$share_allende70,
+                          fnl$share_alessandri70,
+                          fnl$lnDistStgo,
+                          fnl$lnDistRegCapital,
+                          fnl$Pop70_pthousands,
+                          fnl$sh_rural_70))},
+               error = function(e) NA
+               )
+  if(!is.na(m)){
+    store[i,] <- c(m$coef[3],m$se[3],m$pv[3],cutoffs[i])
+  }
+}
+store[which(store[,3]<0.05),]
