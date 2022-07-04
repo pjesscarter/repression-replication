@@ -2,7 +2,7 @@ if(!require(pacman)){
   install.packages("pacman")
   library(pacman)
 }
-p_load(haven,stringr,dplyr,ggplot2,randomForest,Matching)
+p_load(haven,stringr,dplyr,ggplot2,randomForest,Matching,sf,ggmap)
 setwd("../../Extracted Files/Data")
 toload <- str_subset(list.files(),".dta")
 data <- lapply(toload, read_dta)
@@ -45,8 +45,10 @@ matched <- Match(Y=fnl_rf_vict$shVictims_70,
 mb <- MatchBalance(makeform("D"),data=fnl_rf_vict,match.out = matched,nboots=1000)
 #Examine matched outcomes - if we get the map we can plot these
 matchedunits <- bind_rows(fnl_rf_vict[matched$index.treated,],fnl_rf_vict[matched$index.control,])
-
-
+matchedunits$pair <- factor(rep(matched$index.treated, 2))
+matchedunits$Treatment <- as.factor(ifelse(matchedunits$D,"Treatment","Control"))
+shp <- read_sf("Map/cl_comunas_geo/Paper Replication/Data/Map/cl_comunas_geo.shp")
+ggplot() + geom_sf(data = shp) + geom_point(data=matchedunits,aes(x=longitud,y=latitud,shape=pair,col = Treatment))
 #NO Votes
 fnl_rf_no <- fnl_rf %>% filter(!is.na(VoteShareNo)) %>% mutate(D = DMilitaryPresence ==1)
 #1:1 matching with replacement, using pop weights - authors do not specify estimand but
@@ -64,7 +66,7 @@ matched <- Match(Y=fnl_rf_no$VoteShareNo,
 mb <- MatchBalance(makeform("D"),data=fnl_rf_no,match.out = matched,nboots=1000)
 #Examine matched outcomes - if we get the map we can plot these
 matchedunits <- bind_rows(fnl_rf_no[matched$index.treated,],fnl_rf_no[matched$index.control,])
-
+matchedunits$pair <- factor(rep(M$index.treated, 2))
 
 #Registration
 fnl_rf_reg <- fnl_rf %>% filter(!is.na(Share_reg70_w2)) %>% mutate(D = DMilitaryPresence ==1)
@@ -83,4 +85,4 @@ matched <- Match(Y=fnl_rf_reg$Share_reg70_w2,
 mb <- MatchBalance(makeform("D"),data=fnl_rf_reg,match.out = matched,nboots=1000)
 #Examine matched outcomes - if we get the map we can plot these
 matchedunits <- bind_rows(fnl_rf_reg[matched$index.treated,],fnl_rf_reg[matched$index.control,])
-
+matchedunits$pair <- factor(rep(M$index.treated, 2))
