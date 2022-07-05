@@ -9,7 +9,7 @@ toload <- str_subset(list.files(),".dta")
 data <- lapply(toload, read_dta)
 fnl <- data[[1]] 
 set.seed(08540)
-fnl <- fnl  %>% filter(!is.na(IDProv)) %>% mutate(D = DMilitaryPresence, IDProv = as.factor(IDProv))
+fnl <- fnl %>% filter(!is.na(IDProv)) %>% mutate(D = DMilitaryPresence, IDProv = as.factor(IDProv))
 fnl<- bind_cols(fnl,model.matrix( ~ IDProv - 1, data=fnl ))
 controls <- c("share_allende70",
               "share_alessandri70",
@@ -32,7 +32,7 @@ drobust_vict <- drtmle(W = fnl_vict[,controls], A = fnl_vict$D, Y = fnl_vict$shV
                     SL_gr = SL_library, SL_Qr = SL_library,
                     cvFolds=1,
                     avg_over= c("drtmle", "SL"),
-                    n_SL = 1)
+                    n_SL = 10)
 ci(drobust_vict, contrast = c(1,-1))
 wald_test(drobust_vict, contrast = c(1, -1))
 #NO Votes
@@ -57,3 +57,4 @@ drobust_reg <- drtmle(W = fnl_reg[,controls], A = fnl_reg$D, Y = fnl_reg$Share_r
                   n_SL = 10)
 ci(drobust_reg, contrast = c(1,-1))
 
+save(drobust_no, drobust_reg, drobust_vict, file = "drobust.RData")
