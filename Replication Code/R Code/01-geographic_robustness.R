@@ -3,7 +3,7 @@ if(!require(pacman)){
   install.packages("pacman")
   library(pacman)
 }
-p_load(haven,stringr,dplyr,ggplot2,sf,stargazer,rdrobust)
+p_load(haven,stringr,dplyr,ggplot2,sf,stargazer,rdrobust,conleyreg)
 setwd("../../Extracted Files/Data")
 toload <- str_subset(list.files(),".dta")
 data <- lapply(toload, read_dta)
@@ -98,11 +98,20 @@ stargazer(models,
           dep.var.labels = c("NO Vote Share"),
           keep.stat = c("n"))
 #Recreate coefficient plots for Concertacion support
-outcomes <- c(share_aylwin89,
-              share_frei93,
-              share_lagos99,
-              share_bachelet05,
-              share_frei09)
+outcomes <- c("share_aylwin89",
+              "share_frei93",
+              "share_lagos99",
+              "share_bachelet05",
+              "share_frei09")
+models <- list()
+for(i in seq_along(outcomes)){
+  for(j in seq_along(cutoffs)){
+    models[[(i-1)*length(cutoffs)+j]] <- fitlm(treat = paste("cutoff",cutoffs[i],sep=""),
+                                               outcome = outcomes[i],
+                                               sample = "main",
+                                               weights= T)
+  }
+}
 # `qui' reghdfe share_aylwin89 		DMilitaryPresence $C [aw=${W}],absorb(IDProv) vce(robust)
 # 	parmest,saving("${TEMP}temp", replace)
 # 	`qui' reghdfe share_frei93 		DMilitaryPresence 	$C [aw=${W}],absorb(IDProv) vce(robust)

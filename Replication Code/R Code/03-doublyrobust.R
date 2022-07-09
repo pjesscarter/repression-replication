@@ -57,4 +57,50 @@ drobust_reg <- drtmle(W = fnl_reg[,controls], A = fnl_reg$D, Y = fnl_reg$Share_r
                   n_SL = 10)
 ci(drobust_reg, contrast = c(1,-1))
 
-save(drobust_no, drobust_reg, drobust_vict, file = "drobust.RData")
+"share_aylwin89",
+"share_frei93",
+"share_lagos99",
+"share_bachelet05",
+"share_frei09"
+fnl_89 <- fnl %>% dplyr::select(share_aylwin89,all_of(controls),D) %>% na.omit()
+#Use superleaner for OR and average over multiple calls
+drobust_89 <- drtmle(W = fnl_reg[,controls], A = fnl_reg$D, Y = fnl_89$share_aylwin89,
+                      SL_g = SL_library, SL_Q = SL_library,
+                      SL_gr = SL_library, SL_Qr = SL_library,
+                      cvFolds=2,
+                      avg_over= c("drtmle", "SL"),
+                      n_SL = 10)
+fnl_93 <- fnl %>% dplyr::select(share_frei93,all_of(controls),D) %>% na.omit()
+#Use superleaner for OR and average over multiple calls
+drobust_93 <- drtmle(W = fnl_reg[,controls], A = fnl_reg$D, Y = fnl_93$share_frei93,
+                     SL_g = SL_library, SL_Q = SL_library,
+                     SL_gr = SL_library, SL_Qr = SL_library,
+                     cvFolds=2,
+                     avg_over= c("drtmle", "SL"),
+                     n_SL = 10)
+fnl_99 <- fnl %>% dplyr::select(share_lagos99,all_of(controls),D) %>% na.omit()
+#Use superleaner for OR and average over multiple calls
+drobust_99 <- drtmle(W = fnl_reg[,controls], A = fnl_reg$D, Y = fnl_99$share_lagos99,
+                     SL_g = SL_library, SL_Q = SL_library,
+                     SL_gr = SL_library, SL_Qr = SL_library,
+                     cvFolds=2,
+                     avg_over= c("drtmle", "SL"),
+                     n_SL = 10)
+fnl_05 <- fnl %>% dplyr::select(share_bachelet05,all_of(controls),D) %>% na.omit()
+#Use superleaner for OR and average over multiple calls
+drobust_05 <- drtmle(W = fnl_reg[,controls], A = fnl_reg$D, Y = fnl_05$share_bachelet05,
+                     SL_g = SL_library, SL_Q = SL_library,
+                     SL_gr = SL_library, SL_Qr = SL_library,
+                     cvFolds=2,
+                     avg_over= c("drtmle", "SL"),
+                     n_SL = 10)
+fnl_09 <- fnl %>% dplyr::select(share_frei09,all_of(controls),D) %>% na.omit()
+#Use superleaner for OR and average over multiple calls
+drobust_09 <- drtmle(W = fnl_reg[,controls], A = fnl_reg$D, Y = fnl_09$share_frei09,
+                     SL_g = SL_library, SL_Q = SL_library,
+                     SL_gr = SL_library, SL_Qr = SL_library,
+                     cvFolds=2,
+                     avg_over= c("drtmle", "SL"),
+                     n_SL = 10)
+
+save(drobust_no, drobust_reg, drobust_vict, drobust_89,drobust_93,drobust_99,drobust_05,drobust_09, file = "drobust.RData")
