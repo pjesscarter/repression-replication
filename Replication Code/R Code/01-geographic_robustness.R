@@ -3,125 +3,136 @@ if(!require(pacman)){
   install.packages("pacman")
   library(pacman)
 }
-p_load(haven,stringr,dplyr,ggplot2,sf,stargazer,rdrobust,conleyreg)
-setwd("../../Extracted Files/Data")
+p_load(lmtest,parallel,haven,data.table,stringr,dplyr,ggplot2,sf,stargazer,rdrobust,conleyreg,lfe,geosphere,Rcpp,RcppArmadillo)
+setwd("../../conley-se/")
+source("code/conley.R")
+setwd("../Extracted Files/Data")
 toload <- str_subset(list.files(),".dta")
 data <- lapply(toload, read_dta)
 shp <- read_sf("Map/cl_comunas_geo/Paper Replication/Data/Map/cl_comunas_geo.shp")
 fnl <- data[[1]] 
+setwd("../../conley-se/")
 #Note that 2 is the smallest integer cutoff such that any non-treated
 #observations are included, but there are only 2 obs 1<d<2 and only 5: 2<d<3, so start with 3
 
 fnl <- fnl %>% mutate(dist = exp(LnDistMilitaryBase),
-               cutoff2 = as.numeric(dist<2),
-               cutoff3 = as.numeric(dist<3),
-               cutoff4 = as.numeric(dist<4),
-               cutoff5 = as.numeric(dist<5),
-               cutoff10 = as.numeric(dist<10),
-               cutoff20 = as.numeric(dist<20),
-               IDProv = as.factor(IDProv)
+               IDProv = as.factor(IDProv),
+               year = as.factor(1)
                )
-makeform <- function(treat,outcome){
+makeform <- function(outcome){
   #Edit to change baseline controls
   controls <- c("share_allende70",
                 "share_alessandri70",
                 "lnDistStgo",
                 "lnDistRegCapital",
                 "Pop70_pthousands",
-                "sh_rural_70",
-                "IDProv")
+                "sh_rural_70")
   f <- as.formula(
-    paste(outcome, 
-          paste(c(treat,controls), collapse = " + "), 
-          sep = " ~ "))
+    paste(paste(outcome, 
+          paste(c("D",controls), collapse = " + "), 
+          sep = " ~ "), "| year+ IDProv | 0 | longitud + latitud",sep=" "))
 }
 #Sample options are 'main', 'nona', 'all'
 #weights argument controls whether weighted regression is used
-fitlm <- function(treat,outcome,sample="main",weights=T){
-  
+fitlm <- function(treat,outcome,sample="main",weights=T,dc=3.11){
+  mdat <- fnl %>% mutate(D = as.numeric(dist<treat))
   if(sample=="nona"){
-    mdat <- fnl %>% filter(!is.na(IDProv))
+    mdat <- mdat %>% filter(!is.na(IDProv))
   } else if(sample=="all"){
-    mdat <- fnl
+    mdat <- mdat
   } else{
-    mdat <- fnl %>% filter(MainSample==1)
+    mdat <- mdat %>% filter(MainSample==1)
   }
   
   if(weights){
-    return(lm(makeform(treat,outcome),data=mdat,weights=Pop70))
+    mdat <- mdat %>% filter(!is.na(Pop70))
+    m <- felm(makeform(outcome),
+              data=mdat,weights = mdat$Pop70,keepCX=TRUE)
+    SE <- ConleySEs(reg = m,
+                    unit = "IDProv",
+                    time = "year",
+                    lat = "latitud", lon = "longitud",
+                    dist_fn = "SH", dist_cutoff = dc,
+                    cores = 1,
+                    verbose = F)
+    return(list(m,SE))
   } else{
-    return(lm(makeform(treat,outcome),data=mdat))
+    m <- felm(makeform(outcome),
+              data=mdat,keepCX=TRUE)
+    SE <- ConleySEs(reg = m,
+                    unit = "IDProv",
+                    time = "year",
+                    lat = "latitud", lon = "longitud",
+                    dist_fn = "SH", dist_cutoff = dc,
+                    cores = 1,
+                    verbose = F)
+    return(list(m,SE))
   }
 }
 
 #Victimization results, robustness to binary linear regression
-#main result holds for cutoffs <5 miles
-models<-list()
-cutoffs <- c(3:5,10,20)
-for(i in seq_along(cutoffs)){
-  models[[i]]<-fitlm(treat = paste("cutoff",cutoffs[i],sep=""),
-                     outcome = "shVictims_70",
-                     sample = "main",
-                     weights= T)
+#Note that the largest comuna (Natales) has an area of approx 50 km^2, so 
+#a military base within 30 miles is potentially still equivalent to being in the same county
+cutoffs <- c(3:5,10,20,30,50,100)
+cutoffrobust <- function(outcome,sample="main",weights=T){
+  models<-list()
+  ps <- list()
+  ses <- list()
+
+  for(i in seq_along(cutoffs)){
+    m <-fitlm(treat = cutoffs[i],
+                       outcome = outcome,
+                       sample = sample,
+                       weights= weights)
+    models[[i]] <- m[[1]]
+    ses[[i]] <- sqrt(diag(m[[2]]$Spatial_HAC))
+    ps[[i]] <- coeftest(m[[1]],vcov=m[[2]]$Spatial_HAC)[,4]
+  }
+  return(list(models,ses,ps))
 }
-stargazer(models,
-          style="apsr",paste0(cutoffs, " Miles"),
-          keep=paste0("cutoff",cutoffs),
+vct <- cutoffrobust("shVictims_70")
+stargazer(vct[[1]],
+          style="apsr",column.labels =  paste0(cutoffs, " Miles"),
+          keep=1,
           covariate.labels = c("Treatment Indicator"),
           dep.var.labels = c("Victimization"),
-          keep.stat = c("n"))
+          keep.stat = c("n"), se =vct[[2]], p =vct[[3]])
 
 #Voter registration
-for(i in seq_along(cutoffs)){
-  models[[i]]<-fitlm(treat = paste("cutoff",cutoffs[i],sep=""),
-                     outcome = "Share_reg70_w2",
-                     sample = "main",
-                     weights= T)
-}
-stargazer(models,
-          style="apsr",paste0(cutoffs, " Miles"),
-          keep=paste0("cutoff",cutoffs),
+reg <- cutoffrobust("Share_reg70_w2")
+stargazer(reg[[1]],
+          style="apsr",column.labels =  paste0(cutoffs, " Miles"),
+          keep=1,
           covariate.labels = c("Treatment Indicator"),
           dep.var.labels = c("Voter Registration"),
-          keep.stat = c("n"))
-#Voter registration
-for(i in seq_along(cutoffs)){
-  models[[i]]<-fitlm(treat = paste("cutoff",cutoffs[i],sep=""),
-                     outcome = "VoteShareNo",
-                     sample = "main",
-                     weights= T)
-}
-stargazer(models,
-          style="apsr",paste0(cutoffs, " Miles"),
-          keep=paste0("cutoff",cutoffs),
+          keep.stat = c("n"), se =reg[[2]], p =reg[[3]])
+#Vote share NO
+nov <- cutoffrobust("VoteShareNo")
+stargazer(nov[[1]],
+          style="apsr",column.labels =  paste0(cutoffs, " Miles"),
+          keep=1,
           covariate.labels = c("Treatment Indicator"),
           dep.var.labels = c("NO Vote Share"),
-          keep.stat = c("n"))
+          keep.stat = c("n"),se =nov[[2]], p =nov[[3]])
 #Recreate coefficient plots for Concertacion support
 outcomes <- c("share_aylwin89",
               "share_frei93",
               "share_lagos99",
               "share_bachelet05",
               "share_frei09")
-models <- list()
+voteshares <- list()
 for(i in seq_along(outcomes)){
-  for(j in seq_along(cutoffs)){
-    models[[(i-1)*length(cutoffs)+j]] <- fitlm(treat = paste("cutoff",cutoffs[i],sep=""),
-                                               outcome = outcomes[i],
-                                               sample = "main",
-                                               weights= T)
+  voteshares[[i]] <- cutoffrobust(outcomes[i])
   }
+
+for(i in seq_along(outcomes)){
+  stargazer(voteshares[[i]][[1]],
+            style="apsr",column.labels =  paste0(cutoffs, " Miles"),
+            keep=1,
+            covariate.labels = c("Treatment Indicator"),
+            dep.var.labels = outcomes[i],
+            keep.stat = c("n"),se =voteshares[[i]][[2]], p =voteshares[[i]][[3]])
 }
-# `qui' reghdfe share_aylwin89 		DMilitaryPresence $C [aw=${W}],absorb(IDProv) vce(robust)
-# 	parmest,saving("${TEMP}temp", replace)
-# 	`qui' reghdfe share_frei93 		DMilitaryPresence 	$C [aw=${W}],absorb(IDProv) vce(robust)
-# parmest,saving("${TEMP}temp1", replace)
-# `qui' reghdfe share_lagos99 		DMilitaryPresence $C [aw=${W}],absorb(IDProv) vce(robust)
-# 	parmest,saving("${TEMP}temp2", replace)
-# 	`qui' reghdfe share_bachelet05 	DMilitaryPresence $C [aw=${W}],absorb(IDProv) vce(robust)
-# parmest,saving("${TEMP}temp3", replace)
-# `qui' reghdfe share_frei09 		DMilitaryPresence 	$C [aw=${W}],absorb(IDProv) vce(robust)
-# 	parmest,saving("${TEMP}temp4", replace)
 #Repeat with a latent fuzzy RD design - treatment variable is victims above the 75th
 #percentile
 #Compute bandwidth using rdbwselect, use default values for other variables for now
