@@ -77,8 +77,8 @@ matched <- Match(Y=fnl_ps_vict$shVictims_70,
                  M=1,
                  weights = fnl_ps_vict$Pop70,
                  estimand = "ATE",
-                 caliper = 0.2) #optimal caliper per Austin 2011
-#ATE = -0.42452 , SE = 0.48469, p = 0.3811 - sign swap!
+                 caliper = 1) 
+#ATE = 1.3547, SE = 0.10632, p < 2.22e-16  - sign swap!
 #Dramatic improvement in covariate balance but 0 obvs in many provinces
 #Note also that KS tests still have p-values close to 0 for most covariates
 mb <- MatchBalance(makeform("D"),data=fnl_ps_vict,match.out = matched,nboots=1000)
@@ -98,10 +98,8 @@ matched <- Match(Y=fnl_ps_no$VoteShareNo,
                  M=1,
                  weights = fnl_ps_no$Pop70,
                  estimand = "ATE",
-                 caliper = 0.2) #optimal caliper per Austin 2011
-#ATE = 0.46155, SE = 0.38294 , p = 0.22809  - not significant at conventional levels
-#Dramatic improvement in covariate balance but 0 obvs in many provinces
-#Note also that KS tests still have p-values close to 0 for most covariates
+                 caliper = 1) 
+#ATE = -4.7927 , SE = 0.32414 , p < 2.22e-16
 mb <- MatchBalance(makeform("D"),data=fnl_ps_no,match.out = matched,nboots=1000)
 #Examine matched outcomes - if we get the map we can plot these
 matchedunits <- bind_rows(fnl_ps_no[matched$index.treated,],fnl_ps_no[matched$index.control,])
@@ -117,8 +115,8 @@ matched <- Match(Y=fnl_ps_reg$Share_reg70_w2,
                  M=1,
                  weights = fnl_ps_reg$Pop70,
                  estimand = "ATE",
-                 caliper = 0.2) #optimal caliper per Austin 2011
-#ATE = 56.021, SE = 1.1366  , p = 0 - very large and significant effect
+                 caliper = 1) 
+#ATE = 28.217, SE = 1.1573   , p < 2.22e-16 - very large and significant effect
 #Dramatic improvement in covariate balance but 0 obvs in many provinces
 #Note also that KS tests still have p-values close to 0 for most covariates
 mb <- MatchBalance(makeform("D"),data=fnl_ps_reg,match.out = matched,nboots=1000)
