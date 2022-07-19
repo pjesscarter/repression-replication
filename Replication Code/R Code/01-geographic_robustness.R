@@ -120,6 +120,12 @@ outcomes <- c("share_aylwin89",
               "share_lagos99",
               "share_bachelet05",
               "share_frei09")
+
+outcomenames <- c("Vote Share Aylwin 1989",
+                  "Vote Share Frei 1993",
+                  "Vote Share Lagos 1999",
+                  "Vote Share Bachelet 2005",
+                  "Vote Share Frei 2009")
 voteshares <- list()
 for(i in seq_along(outcomes)){
   voteshares[[i]] <- cutoffrobust(outcomes[i])
@@ -130,7 +136,7 @@ for(i in seq_along(outcomes)){
             style="apsr",column.labels =  paste0(cutoffs, " Miles"),
             keep=1,
             covariate.labels = c("Treatment Indicator"),
-            dep.var.labels = outcomes[i],
+            dep.var.labels = outcomenames[i],
             keep.stat = c("n"),se =voteshares[[i]][[2]], p =voteshares[[i]][[3]])
 }
 #Repeat with a latent fuzzy RD design - treatment variable is victims above the 75th

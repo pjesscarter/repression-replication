@@ -1,0 +1,632 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Replicating tables 2 and 3 (and table 5D in appendix)},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{xcolor}
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+
+\title{Replicating tables 2 and 3 (and table 5D in appendix)}
+\author{}
+\date{\vspace{-2.5em}June 2022}
+
+\begin{document}
+\maketitle
+
+\hypertarget{replicating-effect-of-military-base-on-repression-table-2}{%
+\section{Replicating effect of military base on repression (Table
+2)}\label{replicating-effect-of-military-base-on-repression-table-2}}
+
+\begin{itemize}
+\tightlist
+\item
+  DV: shVictims\_70 (Victims / 10,000 inh. in 1970 census)
+\item
+  IV: DMilitaryPresence (Indicator military presence)
+\end{itemize}
+
+The first always corresponds to the results in the main text (which are
+run without the ``outliers'' and NA ) the second table always correspond
+to the Table D5 in the robustness checks (and includes all the sample).
+
+\begin{verbatim}
+## OLS estimation, Dep. Var.: shVictims_70
+## Observations: 276 
+## Fixed-effects: IDProv: 25
+## Standard-errors: Heteroskedasticity-robust 
+##                     Estimate Std. Error   t value   Pr(>|t|)    
+## DMilitaryPresence   2.085556   0.406892  5.125572 6.0367e-07 ***
+## share_allende70    -0.025779   0.024401 -1.056471 2.9180e-01    
+## share_alessandri70 -0.040151   0.030268 -1.326530 1.8590e-01    
+## lnDistStgo         -1.135601   0.297379 -3.818705 1.7019e-04 ***
+## lnDistRegCapital   -0.007104   0.122101 -0.058182 9.5365e-01    
+## Pop70_pthousands   -0.609310   0.269216 -2.263280 2.4498e-02 *  
+## sh_rural_70        -1.437429   0.621063 -2.314465 2.1473e-02 *  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## RMSE: 225.4     Adj. R2: 0.509844
+##               Within R2: 0.325597
+\end{verbatim}
+
+\begin{verbatim}
+## OLS estimation, Dep. Var.: shVictims_70
+## Observations: 289 
+## Fixed-effects: IDProv: 25
+## Standard-errors: Heteroskedasticity-robust 
+##                     Estimate Std. Error   t value   Pr(>|t|)    
+## DMilitaryPresence   3.343722   0.721621  4.633627 5.7165e-06 ***
+## share_allende70     0.010500   0.061275  0.171366 8.6407e-01    
+## share_alessandri70  0.005151   0.068928  0.074736 9.4048e-01    
+## lnDistStgo         -1.799090   0.603846 -2.979386 3.1647e-03 ** 
+## lnDistRegCapital    0.045734   0.220994  0.206946 8.3622e-01    
+## Pop70_pthousands    0.613176   0.415645  1.475240 1.4137e-01    
+## sh_rural_70         5.129180   2.126619  2.411894 1.6571e-02 *  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## RMSE: 555.2     Adj. R2: 0.408722
+##               Within R2: 0.334371
+\end{verbatim}
+
+These replicate well.
+
+\hypertarget{same-regressions-removing-the-1970-weights}{%
+\subsection{Same regressions removing the 1970
+weights}\label{same-regressions-removing-the-1970-weights}}
+
+\begin{verbatim}
+## OLS estimation, Dep. Var.: shVictims_70
+## Observations: 276 
+## Fixed-effects: IDProv: 25
+## Standard-errors: Heteroskedasticity-robust 
+##                     Estimate Std. Error   t value  Pr(>|t|)    
+## DMilitaryPresence   1.668233   0.513553  3.248416 0.0013236 ** 
+## share_allende70    -0.029791   0.019870 -1.499324 0.1350823    
+## share_alessandri70 -0.021421   0.022561 -0.949472 0.3433199    
+## lnDistStgo         -0.563313   0.298302 -1.888398 0.0601588 .  
+## lnDistRegCapital   -0.022119   0.133835 -0.165269 0.8688693    
+## Pop70_pthousands   -0.471032   0.393010 -1.198524 0.2318758    
+## sh_rural_70        -1.964430   0.613876 -3.200044 0.0015563 ** 
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## RMSE: 1.7244     Adj. R2: 0.274373
+##                Within R2: 0.175053
+\end{verbatim}
+
+\begin{verbatim}
+## OLS estimation, Dep. Var.: shVictims_70
+## Observations: 289 
+## Fixed-effects: IDProv: 25
+## Standard-errors: Heteroskedasticity-robust 
+##                     Estimate Std. Error   t value Pr(>|t|) 
+## DMilitaryPresence   0.462518   1.404864  0.329226  0.74225 
+## share_allende70     0.206219   0.227447  0.906666  0.36543 
+## share_alessandri70  0.198230   0.216023  0.917635  0.35967 
+## lnDistStgo          0.186472   0.912230  0.204414  0.83819 
+## lnDistRegCapital   -0.679369   0.797737 -0.851620  0.39522 
+## Pop70_pthousands    0.707144   0.989009  0.715003  0.47526 
+## sh_rural_70         5.721236   4.606785  1.241915  0.21540 
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## RMSE: 7.64222     Adj. R2: 0.109498
+##                 Within R2: 0.034596
+\end{verbatim}
+
+Once we use the full sample and we remove the 1970 weights we lose
+significance on military presence on repression.
+
+The paper justifies using weights in the following way: ``Because our
+main outcomes of interest, voter registration and support for ``No'' in
+the 1988 plebiscite, correspond to individual behaviors, we weight our
+estimates by population in 1970. This way we ensure that we give equal
+importance to all voters, irrespective of the size of the county in
+which they reside''.
+
+However, this logic is unclear because: their variables are already a
+share based on the 1970 population. Victims / 10,000 inh. in 1970
+census, share of support for NO (Voter registration ( / pop. 1970)), or
+the share of registration (Share\_reg70\_w2). As such, this is not
+obviously an individual behaviour anymore. This is an aggregate share of
+an individual behaviour.
+
+\hypertarget{replicating-effect-of-military-base-on-voter-registration-table-3}{%
+\section{Replicating effect of military base on voter registration
+(Table
+3)}\label{replicating-effect-of-military-base-on-voter-registration-table-3}}
+
+\begin{itemize}
+\tightlist
+\item
+  DV: Share\_reg70\_w2 (Voter registration ( / pop. 1970))
+\item
+  IV: DMilitaryPresence (Indicator military presence)
+\end{itemize}
+
+\begin{verbatim}
+## OLS estimation, Dep. Var.: Share_reg70_w2
+## Observations: 276 
+## Fixed-effects: IDProv: 25
+## Standard-errors: Heteroskedasticity-robust 
+##                      Estimate Std. Error   t value   Pr(>|t|)    
+## DMilitaryPresence    9.254647   4.377071  2.114347 3.5500e-02 *  
+## share_allende70     -0.450032   0.379999 -1.184297 2.3745e-01    
+## share_alessandri70   0.185801   0.405607  0.458082 6.4730e-01    
+## lnDistStgo           4.906498   3.235163  1.516615 1.3066e-01    
+## lnDistRegCapital    -3.375665   1.299645 -2.597375 9.9648e-03 ** 
+## Pop70_pthousands   -26.705004   3.397524 -7.860137 1.2294e-13 ***
+## sh_rural_70        -47.971217   8.905126 -5.386922 1.6859e-07 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## RMSE: 2,473.7     Adj. R2: 0.624291
+##                 Within R2: 0.594228
+\end{verbatim}
+
+\begin{verbatim}
+## OLS estimation, Dep. Var.: Share_reg70_w2
+## Observations: 289 
+## Fixed-effects: IDProv: 25
+## Standard-errors: Heteroskedasticity-robust 
+##                      Estimate Std. Error   t value   Pr(>|t|)    
+## DMilitaryPresence   17.431639   4.824832  3.612900 3.6415e-04 ***
+## share_allende70     -0.497663   0.385363 -1.291414 1.9772e-01    
+## share_alessandri70   0.183281   0.416650  0.439892 6.6039e-01    
+## lnDistStgo          -1.477488   3.810271 -0.387764 6.9851e-01    
+## lnDistRegCapital    -1.984443   1.403866 -1.413556 1.5870e-01    
+## Pop70_pthousands   -21.276420   3.553701 -5.987115 7.1566e-09 ***
+## sh_rural_70        -30.185286   9.306844 -3.243343 1.3377e-03 ** 
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## RMSE: 2,641.4     Adj. R2: 0.614882
+##                 Within R2: 0.563786
+\end{verbatim}
+
+These replicate well.
+
+\hypertarget{same-regressions-removing-the-1970-weights-1}{%
+\subsection{Same regressions removing the 1970
+weights}\label{same-regressions-removing-the-1970-weights-1}}
+
+\begin{verbatim}
+## OLS estimation, Dep. Var.: Share_reg70_w2
+## Observations: 276 
+## Fixed-effects: IDProv: 25
+## Standard-errors: Heteroskedasticity-robust 
+##                      Estimate Std. Error   t value   Pr(>|t|)    
+## DMilitaryPresence   10.561560   4.340913  2.433028 1.5692e-02 *  
+## share_allende70     -0.110298   0.268484 -0.410817 6.8157e-01    
+## share_alessandri70   0.385524   0.316089  1.219671 2.2377e-01    
+## lnDistStgo          -0.134540   2.766172 -0.048638 9.6125e-01    
+## lnDistRegCapital    -4.659867   1.233305 -3.778356 1.9845e-04 ***
+## Pop70_pthousands   -27.992974   3.700752 -7.564131 7.9373e-13 ***
+## sh_rural_70        -39.511344   6.840750 -5.775879 2.3211e-08 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## RMSE: 18.5     Adj. R2: 0.305678
+##              Within R2: 0.268004
+\end{verbatim}
+
+\begin{verbatim}
+## OLS estimation, Dep. Var.: Share_reg70_w2
+## Observations: 289 
+## Fixed-effects: IDProv: 25
+## Standard-errors: Heteroskedasticity-robust 
+##                      Estimate Std. Error   t value   Pr(>|t|)    
+## DMilitaryPresence   10.939214   4.288214  2.550995 1.1322e-02 *  
+## share_allende70     -0.218762   0.268235 -0.815559 4.1551e-01    
+## share_alessandri70   0.314806   0.318880  0.987224 3.2446e-01    
+## lnDistStgo          -0.938889   2.740761 -0.342565 7.3221e-01    
+## lnDistRegCapital    -4.051250   1.240763 -3.265129 1.2428e-03 ** 
+## Pop70_pthousands   -25.263138   3.652141 -6.917349 3.6429e-11 ***
+## sh_rural_70        -36.203313   6.697993 -5.405099 1.4785e-07 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## RMSE: 19.2     Adj. R2: 0.284985
+##              Within R2: 0.251996
+\end{verbatim}
+
+These continue to be significant and the effect increases.
+
+\hypertarget{replicating-effect-of-military-base-on-no-vote-share-table-3}{%
+\section{Replicating effect of military base on No vote share (Table
+3)}\label{replicating-effect-of-military-base-on-no-vote-share-table-3}}
+
+\begin{itemize}
+\tightlist
+\item
+  DV: VoteShareNo\_pop70 (``NO'' vote share (/ pop. 1970))
+\item
+  IV: DMilitaryPresence (Indicator military presence)
+\end{itemize}
+
+It seems odd to calculate the share based on the population of 1970.
+Surely the population has changed in 18 years. More so if these are
+areas of high repression, were one could worry that people migrate
+selectively out of these areas. This is a wider concern: these areas
+might be comparable in 1970 but if repression did happen so much, the
+population might have moved endogenously.
+
+\begin{verbatim}
+## OLS estimation, Dep. Var.: VoteShareNo_pop70
+## Observations: 276 
+## Fixed-effects: IDProv: 25
+## Standard-errors: Heteroskedasticity-robust 
+##                      Estimate Std. Error   t value   Pr(>|t|)    
+## DMilitaryPresence    6.214463   2.969349  2.092870 3.7394e-02 *  
+## share_allende70     -0.186782   0.218005 -0.856780 3.9241e-01    
+## share_alessandri70  -0.230856   0.269248 -0.857412 3.9206e-01    
+## lnDistStgo           1.690979   3.572606  0.473318 6.3641e-01    
+## lnDistRegCapital    -2.911383   1.291323 -2.254574 2.5047e-02 *  
+## Pop70_pthousands   -18.116412   5.345796 -3.388908 8.1809e-04 ***
+## sh_rural_70        -38.523627   6.591720 -5.844245 1.6215e-08 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## RMSE: 2,258.3     Adj. R2: 0.431994
+##                 Within R2: 0.412706
+\end{verbatim}
+
+\begin{verbatim}
+## OLS estimation, Dep. Var.: VoteShareNo_pop70
+## Observations: 289 
+## Fixed-effects: IDProv: 25
+## Standard-errors: Heteroskedasticity-robust 
+##                      Estimate Std. Error   t value   Pr(>|t|)    
+## DMilitaryPresence   11.715191   3.321190  3.527408 4.9690e-04 ***
+## share_allende70     -0.208303   0.222767 -0.935069 3.5063e-01    
+## share_alessandri70  -0.223845   0.275594 -0.812227 4.1741e-01    
+## lnDistStgo          -2.607148   4.490237 -0.580626 5.6200e-01    
+## lnDistRegCapital    -1.961312   1.181030 -1.660679 9.7997e-02 .  
+## Pop70_pthousands   -14.512952   5.041026 -2.878968 4.3257e-03 ** 
+## sh_rural_70        -27.257973   6.054570 -4.502050 1.0213e-05 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## RMSE: 2,308.1     Adj. R2: 0.431822
+##                 Within R2: 0.398922
+\end{verbatim}
+
+These replicate well Table 3 column 4. This is not included in Table 5D.
+But if we run this in the full sample (second table) it continues to be
+significant.
+
+\hypertarget{removing-weights}{%
+\subsection{Removing weights}\label{removing-weights}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{print}\NormalTok{(tb3.}\FloatTok{4.}\NormalTok{nw, }\AttributeTok{type=}\StringTok{"table"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## OLS estimation, Dep. Var.: VoteShareNo_pop70
+## Observations: 276 
+## Fixed-effects: IDProv: 25
+## Standard-errors: Heteroskedasticity-robust 
+##                      Estimate Std. Error   t value   Pr(>|t|)    
+## DMilitaryPresence    5.643375   2.717777  2.076468 3.8898e-02 *  
+## share_allende70      0.082982   0.153490  0.540633 5.8925e-01    
+## share_alessandri70  -0.020147   0.181378 -0.111076 9.1165e-01    
+## lnDistStgo          -1.724672   3.036999 -0.567887 5.7063e-01    
+## lnDistRegCapital    -3.059600   0.841565 -3.635606 3.3823e-04 ***
+## Pop70_pthousands   -16.521637   4.015636 -4.114327 5.3131e-05 ***
+## sh_rural_70        -33.368387   6.192989 -5.388091 1.6762e-07 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## RMSE: 14.1     Adj. R2: 0.322461
+##              Within R2: 0.254241
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{print}\NormalTok{(tb3.}\FloatTok{4.}\NormalTok{full.nw, }\AttributeTok{type=}\StringTok{"table"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## OLS estimation, Dep. Var.: VoteShareNo_pop70
+## Observations: 289 
+## Fixed-effects: IDProv: 25
+## Standard-errors: Heteroskedasticity-robust 
+##                      Estimate Std. Error   t value   Pr(>|t|)    
+## DMilitaryPresence    6.058370   2.754520  2.199429 2.8738e-02 *  
+## share_allende70      0.044403   0.143055  0.310394 7.5651e-01    
+## share_alessandri70  -0.041168   0.170609 -0.241298 8.0952e-01    
+## lnDistStgo          -1.897426   3.055091 -0.621070 5.3510e-01    
+## lnDistRegCapital    -2.937539   0.815138 -3.603731 3.7660e-04 ***
+## Pop70_pthousands   -15.312919   3.770628 -4.061106 6.4898e-05 ***
+## sh_rural_70        -31.704163   5.991097 -5.291879 2.5954e-07 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## RMSE: 13.1     Adj. R2: 0.32118 
+##              Within R2: 0.253815
+\end{verbatim}
+
+Both remain significant without weights.
+
+\hypertarget{replicating-effect-of-military-base-on-no-vote-share-table-3-1}{%
+\section{Replicating effect of military base on No vote share (Table
+3)}\label{replicating-effect-of-military-base-on-no-vote-share-table-3-1}}
+
+\begin{itemize}
+\tightlist
+\item
+  DV: VoteShareNo (``NO'' vote share (/ votes 1988))
+\item
+  IV: DMilitaryPresence (Indicator military presence)
+\end{itemize}
+
+Note we are now changing the DV variable to a share computed as NO/votes
+1988.
+
+\begin{verbatim}
+## OLS estimation, Dep. Var.: VoteShareNo
+## Observations: 276 
+## Fixed-effects: IDProv: 25
+## Standard-errors: Heteroskedasticity-robust 
+##                      Estimate Std. Error   t value   Pr(>|t|)    
+## DMilitaryPresence    2.242306   1.014341  2.210604 2.7991e-02 *  
+## share_allende70      0.182955   0.070933  2.579267 1.0488e-02 *  
+## share_alessandri70  -0.464839   0.116520 -3.989343 8.7637e-05 ***
+## lnDistStgo          -0.013226   0.904479 -0.014623 9.8835e-01    
+## lnDistRegCapital    -0.108835   0.242795 -0.448257 6.5437e-01    
+## Pop70_pthousands    -0.185485   0.729740 -0.254180 7.9957e-01    
+## sh_rural_70        -15.570377   2.069707 -7.522984 1.0252e-12 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## RMSE: 676.1     Adj. R2: 0.801928
+##               Within R2: 0.710037
+\end{verbatim}
+
+\begin{verbatim}
+## OLS estimation, Dep. Var.: VoteShareNo
+## Observations: 289 
+## Fixed-effects: IDProv: 25
+## Standard-errors: Heteroskedasticity-robust 
+##                      Estimate Std. Error   t value   Pr(>|t|)    
+## DMilitaryPresence    2.197729   1.115038  1.970989 4.9798e-02 *  
+## share_allende70      0.194229   0.070417  2.758262 6.2283e-03 ** 
+## share_alessandri70  -0.452558   0.114370 -3.956972 9.8263e-05 ***
+## lnDistStgo           0.194032   0.672970  0.288321 7.7333e-01    
+## lnDistRegCapital    -0.130177   0.233835 -0.556702 5.7822e-01    
+## Pop70_pthousands    -0.253822   0.531901 -0.477199 6.3363e-01    
+## sh_rural_70        -15.746881   1.803489 -8.731341 3.2666e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## RMSE: 675.7     Adj. R2: 0.804279
+##               Within R2: 0.710083
+\end{verbatim}
+
+These results replicate well.
+
+\hypertarget{remove-weights}{%
+\subsection{Remove weights}\label{remove-weights}}
+
+\begin{verbatim}
+## OLS estimation, Dep. Var.: VoteShareNo
+## Observations: 276 
+## Fixed-effects: IDProv: 25
+## Standard-errors: Heteroskedasticity-robust 
+##                      Estimate Std. Error   t value   Pr(>|t|)    
+## DMilitaryPresence    1.896762   1.289493  1.470936 1.4260e-01    
+## share_allende70      0.176882   0.070591  2.505743 1.2872e-02 *  
+## share_alessandri70  -0.422598   0.092834 -4.552200 8.3808e-06 ***
+## lnDistStgo          -0.583739   0.768939 -0.759148 4.4850e-01    
+## lnDistRegCapital    -0.091730   0.422374 -0.217176 8.2825e-01    
+## Pop70_pthousands    -0.064806   0.892743 -0.072592 9.4219e-01    
+## sh_rural_70        -17.723545   2.449932 -7.234300 6.0317e-12 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## RMSE: 5.7447     Adj. R2: 0.705408
+##                Within R2: 0.597703
+\end{verbatim}
+
+\begin{verbatim}
+## OLS estimation, Dep. Var.: VoteShareNo
+## Observations: 290 
+## Fixed-effects: IDProv: 25
+## Standard-errors: Heteroskedasticity-robust 
+##                      Estimate Std. Error   t value   Pr(>|t|)    
+## DMilitaryPresence    1.857934   1.319009  1.408583 1.6016e-01    
+## share_allende70      0.196449   0.064787  3.032231 2.6749e-03 ** 
+## share_alessandri70  -0.394896   0.085219 -4.633880 5.7003e-06 ***
+## lnDistStgo          -0.233555   0.741627 -0.314922 7.5308e-01    
+## lnDistRegCapital    -0.260664   0.428150 -0.608814 5.4318e-01    
+## Pop70_pthousands    -0.454368   0.714578 -0.635855 5.2543e-01    
+## sh_rural_70        -17.697755   2.247815 -7.873314 9.5925e-14 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## RMSE: 5.82178     Adj. R2: 0.707611
+##                 Within R2: 0.58623
+\end{verbatim}
+
+When we calculate the share of NO as a proportion of the votes in 1988
+and remove the weights of 1970 we get no significant results on the
+proportion of vote for no.
+
+\hypertarget{zoom-into-weights}{%
+\section{Zoom into weights}\label{zoom-into-weights}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+  \FunctionTok{table}\NormalTok{(d.rep[d.rep}\SpecialCharTok{$}\NormalTok{Pop70}\SpecialCharTok{==}\DecValTok{0}\NormalTok{,]}\SpecialCharTok{$}\NormalTok{IDProv, }\AttributeTok{useNA=}\StringTok{"always"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##   23 <NA> 
+##    1   52
+\end{verbatim}
+
+We have 53 obs without weights. 52 are counties in the ``NA'' province
+and 1 in province ``23''. So these never enter the regressions. This
+only bites when they use the full sample of 289.
+
+\hypertarget{zoom-into-how-this-0-population-affects-other-variables}{%
+\section{Zoom into how this 0 population affects other
+variables}\label{zoom-into-how-this-0-population-affects-other-variables}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{table}\NormalTok{(d.rep[d.rep}\SpecialCharTok{$}\NormalTok{Pop70}\SpecialCharTok{==}\DecValTok{0}\NormalTok{,]}\SpecialCharTok{$}\NormalTok{VoteShareNo\_pop70, }\AttributeTok{useNA=}\StringTok{"always"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## <NA> 
+##   53
+\end{verbatim}
+
+The variable NO vote share is not computed for these 53 obs when is
+divided by pop 70. This of course happens for victims and registration
+share as they are all calculated out of pop 70.
+
+But, these observations do have data for share of NO when calculated out
+of 1988 votes.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{table}\NormalTok{(d.rep[d.rep}\SpecialCharTok{$}\NormalTok{Pop70}\SpecialCharTok{==}\DecValTok{0}\NormalTok{,]}\SpecialCharTok{$}\NormalTok{VoteShareNo, }\AttributeTok{useNA=}\StringTok{"always"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## 4.79041957855225 7.97546005249023 15.3526973724365 18.4094257354736 
+##                1                1                1                1 
+## 20.1627159118652 22.3756008148193 23.5836620330811 24.4635200500488 
+##                1                1                1                1 
+## 26.9014091491699 27.0967750549316 29.9506702423096  30.706033706665 
+##                1                1                1                1 
+## 33.0141525268555 34.6506729125977 35.0665588378906 37.1100158691406 
+##                1                1                1                1 
+## 37.1323509216309 37.3317222595215  40.826000213623      45.55859375 
+##                1                1                1                1 
+## 45.8907318115234 46.3169021606445 47.2273330688477  47.264461517334 
+##                1                1                1                1 
+## 58.6193733215332  58.624828338623  58.971363067627 61.5596542358398 
+##                1                1                1                1 
+## 61.5798950195312 61.6953735351562  62.471752166748 63.5607643127441 
+##                1                1                1                1 
+## 63.9050483703613 64.4086608886719 65.2613525390625  65.489616394043 
+##                1                1                1                1 
+## 66.1229553222656 66.2420806884766 66.3595352172852 66.5534057617188 
+##                1                1                1                1 
+## 66.7752227783203 67.7113800048828  68.085319519043 68.4522933959961 
+##                1                1                1                1 
+##  68.801872253418             <NA> 
+##                1                8
+\end{verbatim}
+
+This to me speaks to population shifting in these 18 years.
+
+\end{document}

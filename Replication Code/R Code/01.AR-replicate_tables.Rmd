@@ -1,7 +1,9 @@
 ---
 title: "Replicating tables 2 and 3 (and table 5D in appendix)"
 date: "June 2022"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -39,7 +41,7 @@ library(ggrepel)
   
   #Arrange by province and comuna
   d.rep <- d.rep %>% arrange(IDProv, comuna)
-  d.rep <- d.rep %>% select(IDProv, comuna, MainSample, DMilitaryPresence, everything())
+  d.rep <- d.rep %>% dplyr::select(IDProv, comuna, MainSample, DMilitaryPresence, everything())
 
 ```
 
@@ -145,11 +147,11 @@ print(tb2.1.nw, type="table")
 print(tb2.1.full.nw, type="table")
 
 ```
-Once we use the full sample and we remove the 1970 weights we loose significance on military presence on repression.
+Once we use the full sample and we remove the 1970 weights we lose significance on military presence on repression.
 
 The paper justifies using weights in the following way: "Because our main outcomes of interest, voter registration and support for “No” in the 1988 plebiscite, correspond to individual behaviors, we weight our estimates by population in 1970. This way we ensure that we give equal importance to all voters, irrespective of the size of the county in which they reside".
 
-However, I am not fully grasping this because: their variables are already a share based on the 1970 population. Victims / 10,000 inh. in 1970 census, share of support for NO (Voter registration ( / pop. 1970)), or the share of registration (Share_reg70_w2). So… this is not an individual behaviour anymore. This is an aggregate share of an individual behaviour.
+However, this logic is unclear because: their variables are already a share based on the 1970 population. Victims / 10,000 inh. in 1970 census, share of support for NO (Voter registration ( / pop. 1970)), or the share of registration (Share_reg70_w2). As such, this is not obviously an individual behaviour anymore, but an aggregate share of an individual behaviour.
 
 # Replicating effect of military base on voter registration (Table 3)
   - DV: Share_reg70_w2	(Voter registration ( / pop. 1970))
@@ -173,7 +175,7 @@ These continue to be significant and the effect increases.
   - DV: VoteShareNo_pop70	("NO" vote share (/ pop. 1970))
   - IV: DMilitaryPresence (Indicator military presence)
   
-Personally, I find it very weird to calculate the share based on the population of 1970. Surely the population has changed in 18 years. More so if these are areas of high repression, were one could worry that people migrate selectively out of these areas. This is a wider concern: these areas might be comparable in 1970 but if repression did happen so much, the population might have moved endogenously.
+It seems odd to calculate the share based on the population of 1970. Surely the population has changed in 18 years. More so if these are areas of high repression, were one could worry that people migrate selectively out of these areas. This is a wider concern: these areas might be comparable in 1970 but if repression did happen so much, the population might have moved endogenously.
 
 ```{r echo=FALSE}
 print(tb3.4, type="table")
@@ -217,13 +219,13 @@ When we calculate the share of NO as a proportion of the votes in 1988 and remov
   table(d.rep[d.rep$Pop70==0,]$IDProv, useNA="always")
 ```
 We have 53 obs without weights. 52 are counties in the "NA" province and 1 in province "23". 
-So these nerver enter the regressions. This only bites when they use the full sample of 289.
+So these never enter the regressions. This only bites when they use the full sample of 289.
 
 # Zoom into how this 0 population affects other variables
 ```{r}
 table(d.rep[d.rep$Pop70==0,]$VoteShareNo_pop70, useNA="always")
 ```
-The variable NO vote share is not computed for these 53 obs when is divided by pop 70. This of course happens fot victims and registration share as they are all calculated out of pop 70.
+The variable NO vote share is not computed for these 53 obs when is divided by pop 70. This of course happens for victims and registration share as they are all calculated out of pop 70.
 
 But, these observations do have data for share of NO when calculated out of 1988 votes.
 ```{r}
