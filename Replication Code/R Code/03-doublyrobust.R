@@ -33,8 +33,8 @@ drobust_vict <- drtmle(W = fnl_vict[,controls], A = fnl_vict$D, Y = fnl_vict$shV
                     cvFolds=1,
                     avg_over= c("drtmle", "SL"),
                     n_SL = 10)
-ci(drobust_vict, contrast = c(1,-1))
-wald_test(drobust_vict, contrast = c(1, -1))
+ci(drobust_vict, contrast = c(-1,1))
+wald_test(drobust_vict, contrast = c(-1,1))
 #NO Votes
 fnl_no <- fnl %>% dplyr::select(VoteShareNo_pop70,all_of(controls),D) %>% na.omit()
 #Use superleaner for OR and average over multiple calls
@@ -44,8 +44,8 @@ drobust_no <- drtmle(W = fnl_no[,controls], A = fnl_no$D, Y = fnl_no$VoteShareNo
                   cvFolds=2,
                   avg_over= c("drtmle", "SL"),
                   n_SL = 10)
-ci(drobust_no, contrast = c(1,-1))
-
+ci(drobust_no, contrast = c(-1,1))
+wald_test(drobust_no, contrast = c(-1,1))
 #Registration
 fnl_reg <- fnl %>% dplyr::select(Share_reg70_w2,all_of(controls),D) %>% na.omit()
 #Use superleaner for OR and average over multiple calls
@@ -55,13 +55,8 @@ drobust_reg <- drtmle(W = fnl_reg[,controls], A = fnl_reg$D, Y = fnl_reg$Share_r
                   cvFolds=2,
                   avg_over= c("drtmle", "SL"),
                   n_SL = 10)
-ci(drobust_reg, contrast = c(1,-1))
-
-"share_aylwin89",
-"share_frei93",
-"share_lagos99",
-"share_bachelet05",
-"share_frei09"
+ci(drobust_reg, contrast = c(-1,1))
+wald_test(drobust_reg, contrast = c(-1,1))
 fnl_89 <- fnl %>% dplyr::select(share_aylwin89,all_of(controls),D) %>% na.omit()
 #Use superleaner for OR and average over multiple calls
 drobust_89 <- drtmle(W = fnl_reg[,controls], A = fnl_reg$D, Y = fnl_89$share_aylwin89,

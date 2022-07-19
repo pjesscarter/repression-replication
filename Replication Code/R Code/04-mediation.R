@@ -4,7 +4,9 @@ if(!require(pacman)){
   library(pacman)
 }
 p_load(haven,stringr,dplyr,ggplot2,mediation)
+
 setwd("../../Extracted Files/Data")
+#load("../../Replication Code/R Code/mediation.RData")
 toload <- str_subset(list.files(),".dta")
 data <- lapply(toload, read_dta)
 fnl <- data[[1]] 

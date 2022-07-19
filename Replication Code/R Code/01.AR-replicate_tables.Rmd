@@ -31,7 +31,7 @@ library(ggrepel)
 ```{r include=FALSE}
 
   #Load data
-  setwd("/Users/maranzazuru/Dropbox/Research/Replication Project/Extracted Files/Data")
+  setwd("../../Extracted Files/Data")
   d.rep <- read_dta("FinalDatasetForReplication.dta")
   d.mil <- read_dta("MilitaryBasesByYear.dta")
   d.vic <- read_dta("VictimsByYear.dta")

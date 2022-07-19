@@ -78,7 +78,7 @@ matched <- Match(Y=fnl_ps_vict$shVictims_70,
                  weights = fnl_ps_vict$Pop70,
                  estimand = "ATE",
                  caliper = 1) 
-#ATE = 1.3547, SE = 0.10632, p < 2.22e-16  - sign swap!
+#ATE = 1.3547, SE = 0.10632, p < 2.22e-16 
 #Dramatic improvement in covariate balance but 0 obvs in many provinces
 #Note also that KS tests still have p-values close to 0 for most covariates
 mb <- MatchBalance(makeform("D"),data=fnl_ps_vict,match.out = matched,nboots=1000)
