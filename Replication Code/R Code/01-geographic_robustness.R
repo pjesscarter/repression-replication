@@ -4,14 +4,14 @@ if(!require(pacman)){
   library(pacman)
 }
 p_load(lmtest,parallel,haven,data.table,stringr,dplyr,ggplot2,sf,stargazer,rdrobust,conleyreg,lfe,geosphere,Rcpp,RcppArmadillo)
-setwd("../../conley-se/")
-source("code/conley.R")
+setwd("../../conley-code/")
+source("conley.R")
 setwd("../Extracted Files/Data")
 toload <- str_subset(list.files(),".dta")
 data <- lapply(toload, read_dta)
 shp <- read_sf("Map/cl_comunas_geo/Paper Replication/Data/Map/cl_comunas_geo.shp")
 fnl <- data[[1]] 
-setwd("../../conley-se/")
+setwd("../../conley-code/")
 #Note that 2 is the smallest integer cutoff such that any non-treated
 #observations are included, but there are only 2 obs 1<d<2 and only 5: 2<d<3, so start with 3
 
