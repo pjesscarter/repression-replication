@@ -5,7 +5,7 @@ if(!require(pacman)){
 }
 p_load(lmtest,parallel,haven,data.table,stringr,dplyr,ggplot2,sf,stargazer,rdrobust,conleyreg,lfe,geosphere,Rcpp,RcppArmadillo)
 setwd("../../conley-code/")
-source("conley.R")
+source("code/conley.R")
 setwd("../Extracted Files/Data")
 toload <- str_subset(list.files(),".dta")
 data <- lapply(toload, read_dta)
@@ -97,6 +97,13 @@ stargazer(vct[[1]],
           covariate.labels = c("Treatment Indicator"),
           dep.var.labels = c("Victimization"),
           keep.stat = c("n"), se =vct[[2]], p =vct[[3]])
+#p values
+stargazer(vct[[1]],
+          style="apsr",column.labels =  paste0(cutoffs, " Miles"),
+          keep=1,
+          covariate.labels = c("Treatment Indicator"),
+          dep.var.labels = c("Victimization"),
+          keep.stat = c("n"), se =vct[[2]], p =vct[[3]], report=('vc*p'))
 
 #Voter registration
 reg <- cutoffrobust("Share_reg70_w2")
