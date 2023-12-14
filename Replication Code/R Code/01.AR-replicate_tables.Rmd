@@ -91,12 +91,15 @@ library(ggrepel)
    #Column 1
     tb3.1 <- feols(Share_reg70_w2 ~ DMilitaryPresence + .[C] | IDProv, data = d.rep[d.rep$MainSample==1,], "hetero", weights = ~Pop70)
         #Replicates well
+    tb3.1.2sls <- feols(Share_reg70_w2 ~ .[C] | IDProv | shVictims_70 ~ DMilitaryPresence, data = d.rep[d.rep$MainSample==1,], "hetero", weights = ~Pop70)
+        #Replicates well
     
     #Column 4 and 3
     tb3.4 <- feols(VoteShareNo_pop70 ~ DMilitaryPresence + .[C] | IDProv, data = d.rep[d.rep$MainSample==1,], "hetero", weights = ~Pop70)
         #Replicates well
     tb3.3 <- feols(VoteShareNo ~ DMilitaryPresence + .[C] | IDProv, data = d.rep[d.rep$MainSample==1,], "hetero", weights = ~Pop70)
-
+    
+tb3.3.2sls <- feols(VoteShareNo ~ .[C] | IDProv | shVictims_70 ~ DMilitaryPresence, data = d.rep[d.rep$MainSample==1,], "hetero", weights = ~Pop70)
     #Table D5, Column 2
    tb3.1.full <- feols(Share_reg70_w2 ~ DMilitaryPresence + .[C] | IDProv, data = d.rep, "hetero", weights = ~Pop70)
             #Replicates well

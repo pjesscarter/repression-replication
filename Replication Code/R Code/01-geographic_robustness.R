@@ -113,6 +113,13 @@ stargazer(reg[[1]],
           covariate.labels = c("Treatment Indicator"),
           dep.var.labels = c("Voter Registration"),
           keep.stat = c("n"), se =reg[[2]], p =reg[[3]])
+#p values
+stargazer(reg[[1]],
+          style="apsr",column.labels =  paste0(cutoffs, " Miles"),
+          keep=1,
+          covariate.labels = c("Treatment Indicator"),
+          dep.var.labels = c("Voter Registration"),
+          keep.stat = c("n"), se =reg[[2]], p =reg[[3]], report=('vc*p'))
 #Vote share NO
 nov <- cutoffrobust("VoteShareNo")
 stargazer(nov[[1]],
@@ -121,6 +128,13 @@ stargazer(nov[[1]],
           covariate.labels = c("Treatment Indicator"),
           dep.var.labels = c("NO Vote Share"),
           keep.stat = c("n"),se =nov[[2]], p =nov[[3]])
+#p values
+stargazer(nov[[1]],
+          style="apsr",column.labels =  paste0(cutoffs, " Miles"),
+          keep=1,
+          covariate.labels = c("Treatment Indicator"),
+          dep.var.labels = c("NO Vote Share"),
+          keep.stat = c("n"),se =nov[[2]], p =nov[[3]], report=('vc*p'))
 #Recreate coefficient plots for Concertacion support
 outcomes <- c("share_aylwin89",
               "share_frei93",
